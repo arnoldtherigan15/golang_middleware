@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"section8/domain"
 
@@ -28,7 +29,7 @@ func (s *service) GenerateToken(user *domain.User) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 
-	var SECRET_KEY = os.Getenv("SECRET_KEY")
+	var SECRET_KEY = os.Getenv("SECRET")
 
 	access_token, err := token.SignedString([]byte(SECRET_KEY))
 	if err != nil {
@@ -44,7 +45,8 @@ func (s *service) ValidateToken(encodedToken string) (*jwt.Token, error) {
 		if !ok {
 			return nil, errors.New("invalid token")
 		}
-		var SECRET_KEY = os.Getenv("SECRET_KEY")
+		var SECRET_KEY = os.Getenv("SECRET")
+		fmt.Println()
 		return []byte(SECRET_KEY), nil
 	})
 

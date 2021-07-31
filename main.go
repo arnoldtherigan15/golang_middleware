@@ -62,15 +62,15 @@ func main() {
 	jwt := _jwt.NewJwtService(userRepo)
 
 	e := echo.New()
-	// g := e.Group("/api/v1")
+	g := e.Group("/api/v1")
 
-	userJwt := e.Group("/api/v1")
+	userJwt := e.Group("")
 	jwt.SetJwtAdmin(userJwt)
 
 	_carHandler.NewHandler(userJwt, carService)
-	_garageHandler.NewHandler(userJwt, garageService)
-	_userHandler.NewHandler(userJwt, userService)
-	_orderHandler.NewHandler(userJwt, orderService)
+	_garageHandler.NewHandler(g, garageService)
+	_userHandler.NewHandler(g, userService)
+	_orderHandler.NewHandler(g, orderService)
 
 	PORT := os.Getenv("SERVER_PORT")
 	log.Fatal(e.Start(PORT))
