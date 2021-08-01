@@ -49,8 +49,8 @@ func (h *Handler) Create(c echo.Context) (err error) {
 
 	createdUser, err := h.service.Create(&user)
 	if err != nil {
-		errResponse := domain.ErrorFormatter(http.StatusInternalServerError, domain.ErrInternalServerError)
-		return c.JSON(http.StatusInternalServerError, errResponse)
+		errResponse := domain.ErrorFormatter(http.StatusUnprocessableEntity, err)
+		return c.JSON(http.StatusUnprocessableEntity, errResponse)
 	}
 
 	formattedUser := response.FormatUserResponse(createdUser)

@@ -20,6 +20,14 @@ func NewService(repository domain.UserRepository, authService auth.Service) *ser
 }
 
 func (s *service) Create(us *domain.User) (*domain.User, error) {
+	userExists, err := s.repository.FindByEmail(us.Email)
+	if err != nil {
+		return &domain.User{}, errors.New("internal server error")
+	}
+
+	if userExists.ID != 0 {
+		return &domain.User{}, errors.New("email already exists")
+	}
 	us.Role = "customer"
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(us.Password), bcrypt.MinCost)
 	if err != nil {

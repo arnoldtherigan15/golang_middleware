@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+
 	// "os"
 	"section8/domain"
 	"strconv"
@@ -17,7 +18,6 @@ type Handler struct {
 
 func NewHandler(e *echo.Group, carService domain.CarService) {
 	handler := &Handler{carService}
-	// e.Use(mid.JWT([]byte(os.Getenv("SECRET"))))
 	g := e.Group("/cars")
 	g.POST("", handler.Create)
 	g.GET("", handler.FindAll)
@@ -36,7 +36,6 @@ func isRequestValid(car *domain.Car) (bool, error) {
 }
 
 func (h *Handler) FindAll(c echo.Context) (err error) {
-
 	cars, err := h.CarService.FindAll()
 
 	if err != nil {
@@ -44,7 +43,7 @@ func (h *Handler) FindAll(c echo.Context) (err error) {
 		return c.JSON(http.StatusInternalServerError, errResponse)
 	}
 
-	return c.JSON(http.StatusCreated, cars)
+	return c.JSON(http.StatusOK, cars)
 }
 
 func (h *Handler) Delete(c echo.Context) (err error) {

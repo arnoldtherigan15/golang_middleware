@@ -64,13 +64,17 @@ func main() {
 	e := echo.New()
 	g := e.Group("/api/v1")
 
-	userJwt := e.Group("")
-	jwt.SetJwtAdmin(userJwt)
+	adminAuthorization := e.Group("/api/v1")
+	employeeAuthorization := e.Group("/api/v1")
+	// employeeAuthorization := e.Group("/api/v1")
+	jwt.SetJwtAdmin(adminAuthorization)
+	jwt.SetJwtEmployee(employeeAuthorization)
+	// jwt.SetJwtGeneral(employeeAuthorization)
 
-	_carHandler.NewHandler(userJwt, carService)
-	_garageHandler.NewHandler(g, garageService)
+	_carHandler.NewHandler(employeeAuthorization, carService)
+	_garageHandler.NewHandler(adminAuthorization, garageService)
 	_userHandler.NewHandler(g, userService)
-	_orderHandler.NewHandler(g, orderService)
+	_orderHandler.NewHandler(employeeAuthorization, orderService)
 
 	PORT := os.Getenv("SERVER_PORT")
 	log.Fatal(e.Start(PORT))
